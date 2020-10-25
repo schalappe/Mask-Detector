@@ -50,7 +50,7 @@ def about():
         'dans une image.'
     )
     st.write(
-        "Vous pouvez trouver le code sur [GitLab](https://gitlab.com/schalappe/spot-the-mask-challenge)."
+        "Vous pouvez trouver le code sur [GitLab](https://gitlab.com/schalappe/mask-detector)."
     )
     # function
     st.header('Fonctionnement')
