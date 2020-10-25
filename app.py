@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
+from tempfile import NamedTemporaryFile
+
+import face_recognition as fr
 import numpy as np
 import streamlit as st
 import tensorflow as tf
-import face_recognition as fr
 from PIL import Image
+
 from preprocessors import Preprocessor
 from utils import visualize_detections
-from tempfile import NamedTemporaryFile
 
 # header
 st.title('COVID-19: Détection de masque')
