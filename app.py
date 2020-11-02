@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from tempfile import NamedTemporaryFile
 
-import face_recognition as fr
+import mtcnn
 import numpy as np
 import streamlit as st
 import tensorflow as tf
 from PIL import Image
 
-from preprocessors import Preprocessor
 from utils import visualize_detections
 
 # header
@@ -15,8 +14,12 @@ st.title('COVID-19: Détection de masque')
 # sidebar
 pages = ['Accueil', 'Essayer']
 choice = st.sidebar.selectbox('Menu', pages)
-# processor
-pp = Preprocessor(224, 224)
+
+
+# load model
+@st.cache
+def load_data():
+    return [tf.keras.models.load_model('./model/best_nasnet.h5'), mtcnn.MTCNN()]
 
 
 # mask detection
@@ -24,22 +27,19 @@ def mask_recognition(image):
     preds = []
     img = np.array(image.convert('RGB'))
     # detect and encode faces
-    boxes = fr.face_locations(img)
-    for top, right, bottom, left in boxes:
-        if (right - left) >= 50 and (bottom - top) >= 50:
-            face = img[top:bottom, left:right]
-            face = pp.preprocess(face)
-            face = face.reshape(1, 224, 224, 3)
+    boxes = detector.detect_faces(img)
+    for box in boxes:
+        x, y, width, height = box['box']
+        if width >= 30 and height >= 30 and box['confidence'] > 0.97:
+            face = img[y:y+height, x:x+width]
+            face = Image.fromarray(face)
+            face = face.resize((224, 224))
+            face = tf.keras.preprocessing.image.img_to_array(face)/255.0
+            face = np.expand_dims(face, axis=0)
             # prediction
             preds.append(model.predict(face)[0][0])
     img = visualize_detections(img, boxes, preds)
     return img
-
-
-# load model
-@st.cache
-def load_data():
-    return tf.keras.models.load_model('./model/best_nasnet.h5')
 
 
 # about
@@ -86,14 +86,14 @@ def about():
     )
     st.write(
         'Pour la détection de visage, on utilise la bibliothèque: '
-        '[Face Recognition](https://github.com/ageitgey/face_recognition). '
+        '[MTCNN](https://github.com/ipazc/mtcnn). '
         "Ce qui peut poser certains problème. Car le succès de l'application "
         "dépend dès lors du bon fonctionnement de ce package."
     )
     # examples
     st.header('Exemples')
     st.image('./img/5.jpg', width=708, caption='Exemple 1: Masque détecté')
-    st.image('./img/3.jpg', width=708, caption='Exemple 2: Sans masque')
+    st.image('./img/3.jpeg', width=708, caption='Exemple 2: Sans masque')
     # go further
     st.header('Aller plus loin')
     st.write("L'utilisation de l'application de detection de visage peut engendrer des erreurs. "
@@ -102,7 +102,7 @@ def about():
              "modèle pour détecter les masques.")
     st.image('./img/0.jpg', width=708,
              caption="Exemple 3: Visage non détecté par le package bien que le "
-                     "modèle est détecté la présence de masque")
+                     "modèle est détecté la présence d'un masque")
 
 
 # main
@@ -118,10 +118,14 @@ def main():
             temp_file.write(file.getvalue())
             image = Image.open(temp_file.name)
             if st.button("Lancer"):
-                result_img = mask_recognition(image)
-                st.image(result_img, use_column_width=True)
+                try:
+                    result_img = mask_recognition(image)
+                    st.image(result_img, use_column_width=True)
+                except:
+                    st.write('Nous avons renconté certains problèmes avec cette image ...')
+                    st.image(image, use_column_width=True)
 
 
 if __name__ == '__main__':
-    model = load_data()
+    model, detector = load_data()
     main()

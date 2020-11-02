@@ -13,12 +13,12 @@ With a model to tell if an image contains a mask. We can build an application to
 2. extract the detected faces
 3. determine if the image (face) contains a mask
 
-For face detection, [Face Recognition](https://github.com/ageitgey/face_recognition) package is used. This can cause some problems. Because the success of the application depends on the correct performance of this package.
+For face detection, [MTCNN](https://github.com/ipazc/mtcnn) package is used. This can cause some problems. Because the success of the application depends on the correct performance of this package.
 
 ## Example
 ![image 1](./img/5.jpg)
 
-![image 2](./img/3.jpg)
+![image 2](./img/3.jpeg)
 
 ## Go further
 The use of the face detection application can lead to errors. If the face is not recognized, there is no mask detection. To go further, we can specially train a model to detect masks.
