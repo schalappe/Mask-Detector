@@ -1,6 +1,6 @@
-numpy~=1.19.3
+numpy~=1.18.5
 streamlit~=0.70.0
-tensorflow~=2.2.0
+tensorflow~=2.2.1
 Pillow~=7.2.0
 opencv-python~=4.4.0.44
 mtcnn~=0.1.0
