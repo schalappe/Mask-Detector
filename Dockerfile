@@ -1,4 +1,4 @@
-FROM opencvcourses/opencv:440
+FROM python3.8.5-slim
 EXPOSE 8501
 WORKDIR /app
 COPY . .
