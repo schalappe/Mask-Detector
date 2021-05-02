@@ -1,4 +1,4 @@
-FROM python3.8.5-slim
+FROM python3.8-slim
 EXPOSE 8501
 WORKDIR /app
 COPY . .
