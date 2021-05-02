@@ -52,7 +52,7 @@ def about():
         'dans une image.'
     )
     st.write(
-        "Vous pouvez trouver le code sur [GitLab](https://gitlab.com/schalappe/mask-detector)."
+        "Vous pouvez trouver le code sur [GitHub](https://github.com/schalappe/Mask-Detector)."
     )
     # function
     st.header('Fonctionnement')
@@ -68,7 +68,7 @@ def about():
     st.write(
         'Dans la première étape, il faut bâtir un modèle de classification '
         'pour savoir si oui ou non une image contient un masque. '
-        'Voir le code [ici](https://gitlab.com/schalappe/spot-the-mask-challenge)'
+        'Voir le code [ici](https://github.com/schalappe/Mask-Challenge)'
     )
     # step 2
     st.subheader('Etape 2: Détection')
@@ -79,7 +79,7 @@ def about():
     )
     st.write(
         '''
-            1. utiliser un algoritme pour détecter des visages
+            1. utiliser un modèle pour détecter des visages
             2. extraire les visages détectés
             3. determiner si l'image (visage) contient un masque
         '''
@@ -122,7 +122,7 @@ def main():
                     result_img = mask_recognition(image)
                     st.image(result_img, use_column_width=True)
                 except:
-                    st.write('Nous avons renconté certains problèmes avec cette image ...')
+                    st.write('Nous avons rencontré certains problèmes avec cette image ...')
                     st.image(image, use_column_width=True)
 
 
