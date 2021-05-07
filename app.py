@@ -2,6 +2,7 @@
 from tempfile import NamedTemporaryFile
 
 import mtcnn
+import logging
 import numpy as np
 import streamlit as st
 import tensorflow as tf
@@ -9,8 +10,12 @@ from PIL import Image
 
 from utils import visualize_detections
 
+# logging level
+logging.basicConfig(filename="app.log", filemode="w", format="%(name)s - %(levelname)s - %(message)s")
+
 # header
 st.title("COVID-19: Détection de masque")
+
 # sidebar
 pages = ["Accueil", "Essayer"]
 choice = st.sidebar.selectbox("Menu", pages)
@@ -19,11 +24,20 @@ choice = st.sidebar.selectbox("Menu", pages)
 # load model
 @st.cache
 def load_data():
+    logging.info("Load model")
     return [tf.keras.models.load_model("./model/best_nasnet.h5"), mtcnn.MTCNN()]
 
 
 # mask detection
-def mask_recognition(image):
+def mask_recognition(image: np.ndarray) -> np.ndarray:
+    """
+    Take an image, search face then search mask
+    Args:
+        image (ndarray): Image to process
+
+    Returns:
+        ndarray: Image processed
+    """
     preds = []
     img = np.array(image.convert("RGB"))
     # detect and encode faces
@@ -124,8 +138,9 @@ def main():
                 try:
                     result_img = mask_recognition(image)
                     st.image(result_img, use_column_width=True)
+                    logging.debug("Mask find in image")
                 except Exception as e:
-                    print(e)
+                    logging.warning(f"Error in processing {e}")
                     st.write("Nous avons rencontré certains problèmes avec cette image ...")
                     st.image(image, use_column_width=True)
 
