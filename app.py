@@ -60,9 +60,9 @@ def mask_recognition(image: np.ndarray) -> np.ndarray:
 def about():
     # description
     st.write(
-        "Cette application est un détecteur de masque dans une image. Dans un"
+        "Cette application est un détecteur de masque dans une image. Dans un "
         "contexte de COVID-19 où le port du masque est vivement recommander. "
-        "Ceci démontre l'utilisation du deep learning pour détecter des masques"
+        "Ceci démontre l'utilisation du deep learning pour détecter des masques "
         "dans une image."
     )
     st.write("Vous pouvez trouver le code sur [GitHub](https://github.com/schalappe/Mask-Detector).")
@@ -111,7 +111,7 @@ def about():
     st.write(
         "L'utilisation de l'application de detection de visage peut engendrer des erreurs. "
         "Si le visage n'est pas reconnu, il n'y a pas de détection de "
-        "masque. Pour parler aller, on peut entraîner spécifiquement un "
+        "masque. Pour aller plus loin, on peut entraîner spécifiquement un "
         "modèle pour détecter les masques."
     )
     st.image(
